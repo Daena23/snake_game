@@ -7,7 +7,6 @@ SNAKE_HEAD_LEFT = '◄'  # ▲ ► ▼ ◄
 SNAKE_HEAD_UP = '▲'
 SNAKE_HEAD_RIGHT = '►'
 SNAKE_HEAD_DOWN = '▼'
-
 DEAD_SNAKE = '҈'
 
 YUMMY = '♣'  # 🎂'
@@ -21,4 +20,3 @@ COORD_VARS = [
     ['a', 0, -1, SNAKE_HEAD_LEFT]
 ]
 WADS = [COORD_VARS[i][0] for i in range(len(COORD_VARS))]
-# WADS_BACK = WADS[::-1]

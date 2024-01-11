@@ -1,5 +1,3 @@
-import copy
-
 from configuration import EMPTY_CELL, field_size
 
 
@@ -17,9 +15,4 @@ def visualize_field(field):
         for column in range(field_size):
             print(field[row][column], end='  ')
         print()
-
-    # for _ in range(field_size):
-    #     for _ in range(field_size):
-    #         print(field[_][_], end='  ')
-    #     print()
     print()

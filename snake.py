@@ -1,6 +1,6 @@
 from math import floor
 
-from configuration import COORD_VARS, WADS, WALL, SNAKE_TAIL, DEAD_SNAKE, field_size
+from configuration import COORD_VARS, DEAD_SNAKE, SNAKE_TAIL, WADS, field_size
 
 
 class Snake:
@@ -20,41 +20,26 @@ class Snake:
         self.coordinates = [[center, center - i] for i in range(self.length)]
         return
 
-    def move(self, field):
-        new_coordinates = []
-        row_dir, column_dir = COORD_VARS[WADS.index(self.direction)][1], COORD_VARS[WADS.index(self.direction)][2]
-        self.head_symbol = COORD_VARS[WADS.index(self.direction)][3]
-        row_shuttle, column_shuttle = self.coordinates[0]
-        row_end, column_end = self.coordinates[len(self.coordinates) - 1]
-        if field[row_shuttle + row_dir][column_shuttle + column_dir] == WALL:
-            self.hits_wall()
-            return self.coordinates
-        else:
-            new_coordinates.append([row_shuttle + row_dir, column_shuttle + column_dir])  # head moves
-            for coordinates in range(len(self.coordinates[1:])):  # tail catches up
-                previous_coord = self.coordinates[1:][coordinates]
-                new_coordinates.append([row_shuttle, column_shuttle])
-                row_shuttle, column_shuttle = previous_coord
-            if self.increase_length:
-                new_coordinates.append([row_end, column_end])
-                self.length += 1
-                self.increase_length = False
-            print(self.coordinates, 'af')
-            print(new_coordinates, 'n')
-            if self.if_crushes_into_itself(new_coordinates):
-                return self.coordinates
-            return new_coordinates
+    @staticmethod
+    def command():
+        event = input('Input w, a, s or d')
+        while True:
+            if event in WADS:
+                return event
+            else:
+                event = input('Wrong input. Print w, a, s or d')
 
     def hits_wall(self):
         self.alive = False
 
     def if_crushes_into_itself(self, new_coordinates):
-        overlay_coordinates_list = []
-        for coord in new_coordinates:
-            if coord in overlay_coordinates_list:
+        shuttle_set = set()
+        for coordinates in new_coordinates:
+            coordinates_tuple = tuple(coordinates)
+            if coordinates_tuple in shuttle_set:
                 self.alive = False
-                return
-            overlay_coordinates_list.append(coord)
+                return self.coordinates
+            shuttle_set.add(coordinates_tuple)
 
     def act_if_died(self):
         if not self.alive:
