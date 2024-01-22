@@ -5,12 +5,12 @@ from loop_functions import put_snake
 from snake import Snake
 
 
-def field_init():
+def field_init() -> tuple[list[list], list[list[str]]]:
     field = create_basic_field(field_size)
     return field, create_basic_field(field_size)
 
 
-def create_basic_field(size):
+def create_basic_field(size: int) -> list[list[str]]:
     empty_field = [[EMPTY_CELL for _ in range(size)] for _ in range(size)]
     walls_coordinates = define_walls_coordinates(size)
     basic_field = copy.deepcopy(empty_field)
@@ -19,7 +19,7 @@ def create_basic_field(size):
     return basic_field
 
 
-def define_walls_coordinates(size):
+def define_walls_coordinates(size: int) -> list[list[int]]:
     border = [0, size - 1]
     walls_coordinates = []
     for i in range(size):
@@ -31,7 +31,7 @@ def define_walls_coordinates(size):
     return walls_coordinates
 
 
-def snake_init(field):
+def snake_init(field: list[list]) -> tuple[Snake, list[list]]:
     snake = Snake()
     field = put_snake(snake, field)
     return snake, field
