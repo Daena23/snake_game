@@ -1,30 +1,31 @@
 import random
+from typing import List
 
-from configuration import COORD_VARS, WADS, WALL
+from configurations import COORD_VARS, WADS, WALL
 from snake import Snake
 from yummy import Yummy
 
 
-def yummy_loop(yummy_list: list[Yummy], game_counter: int, snake: Snake, field: list[list]) -> list[Yummy]:
-    if random.random() < Yummy.probability and len(yummy_list) < Yummy.max_number:
-        yummy_list.append(Yummy(field, game_counter))
-    for yummy in yummy_list:
-        yummy.exists = (game_counter != yummy.counter + yummy.lifespan)  # yummy disappears
+def yummy_loop(all_yummies: List[Yummy], game_counter: int, snake: Snake, field: List[List]) -> List[Yummy]:
+    if random.random() < Yummy.probability and len(all_yummies) < Yummy.max_number:
+        all_yummies.append(Yummy(field, game_counter))
+    for yummy in all_yummies:
+        yummy.exists = (game_counter != yummy.counter + Yummy.lifespan)  # yummy disappears
         yummy.check_if_eaten(snake)
-        yummy_row, yummy_column = yummy.coordinates  # put yummy
+        yummy_row, yummy_column = yummy.coordinates
         if field[yummy_row][yummy_column] != snake.head_symbol:
             field[yummy_row][yummy_column] = yummy.symbol
-    return list(filter(lambda yummy_yummy: yummy.exists, yummy_list))
+    return list(filter(lambda yummy_yummy: yummy.exists, all_yummies))
 
 
-def snake_loop(snake: Snake, field: list[list]) -> None:
+def snake_loop(snake: Snake, field: List[List]) -> None:
     snake.direction = snake.command()
     snake.coordinates = move_snake(snake, field)
     snake.act_if_died()
     put_snake(snake, field)
 
 
-def move_snake(snake: Snake, field: list[list]) -> list[list[int]]:
+def move_snake(snake: Snake, field: List[List]) -> List[List[int]]:
     new_coordinates = []
     sn_dir = WADS.index(snake.direction)
     row_dir, column_dir, snake.head_symbol = COORD_VARS[sn_dir][1], COORD_VARS[sn_dir][2], COORD_VARS[sn_dir][3]
@@ -48,7 +49,7 @@ def move_snake(snake: Snake, field: list[list]) -> list[list[int]]:
         return new_coordinates
 
 
-def put_snake(snake: Snake, field: list[list]) -> list[list]:
+def put_snake(snake: Snake, field: List[List]) -> List[List]:
     head_row, head_column = snake.coordinates[0]
     field[head_row][head_column] = snake.head_symbol
     for coordinates in snake.coordinates[1:]:

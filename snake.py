@@ -1,6 +1,7 @@
 from math import floor
+from typing import List
 
-from configuration import COORD_VARS, DEAD_SNAKE, SNAKE_TAIL, WADS, field_size
+from configurations import COORD_VARS, DYING_SNAKE, SNAKE_TAIL, WADS, FIELD_SIZE
 
 
 class Snake:
@@ -12,11 +13,10 @@ class Snake:
         self.tail_symbol = SNAKE_TAIL
         self.head_symbol = COORD_VARS[WADS.index(self.direction)][3]
         self.coordinates = []
-        # a = (list(filter(lambda x: x == COORD_VARS[3], COORD_VARS))[0][3])
         self.find_init_coordinates()
 
     def find_init_coordinates(self) -> None:
-        center = floor(field_size / 2)
+        center = floor(FIELD_SIZE / 2)
         self.coordinates = [[center, center - i] for i in range(self.length)]
         return
 
@@ -32,7 +32,7 @@ class Snake:
     def hits_wall(self) -> None:
         self.alive = False
 
-    def if_crushes_into_itself(self, new_coordinates: list[list[int]]):
+    def if_crushes_into_itself(self, new_coordinates: List[List[int]]):
         shuttle_set = set()
         for coordinates in new_coordinates:
             coordinates_tuple = tuple(coordinates)
@@ -43,4 +43,4 @@ class Snake:
 
     def act_if_died(self) -> None:
         if not self.alive:
-            self.tail_symbol = self.head_symbol = DEAD_SNAKE
+            self.tail_symbol = self.head_symbol = DYING_SNAKE

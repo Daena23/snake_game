@@ -1,25 +1,26 @@
 import copy
+from typing import Tuple, List
 
-from configuration import EMPTY_CELL, WALL, field_size
+from configurations import EMPTY_CELL, WALL, FIELD_SIZE
 from loop_functions import put_snake
 from snake import Snake
 
 
-def field_init() -> tuple[list[list], list[list[str]]]:
-    field = create_basic_field(field_size)
-    return field, create_basic_field(field_size)
+def field_init() -> Tuple[List[List], List[List[str]]]:
+    field = create_basic_field(FIELD_SIZE)
+    return field, create_basic_field(FIELD_SIZE)
 
 
-def create_basic_field(size: int) -> list[list[str]]:
+def create_basic_field(size: int) -> List[List[str]]:
     empty_field = [[EMPTY_CELL for _ in range(size)] for _ in range(size)]
-    walls_coordinates = define_walls_coordinates(size)
+    wall_coordinates = define_wall_coordinates(size)
     basic_field = copy.deepcopy(empty_field)
-    for row, column in walls_coordinates:
+    for row, column in wall_coordinates:
         basic_field[row][column] = WALL
     return basic_field
 
 
-def define_walls_coordinates(size: int) -> list[list[int]]:
+def define_wall_coordinates(size: int) -> List[List[int]]:
     border = [0, size - 1]
     walls_coordinates = []
     for i in range(size):
@@ -31,7 +32,7 @@ def define_walls_coordinates(size: int) -> list[list[int]]:
     return walls_coordinates
 
 
-def snake_init(field: list[list]) -> tuple[Snake, list[list]]:
+def snake_init(field: List[List]) -> tuple[Snake, List[List]]:
     snake = Snake()
     field = put_snake(snake, field)
     return snake, field
